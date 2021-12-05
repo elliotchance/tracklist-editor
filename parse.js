@@ -26,7 +26,7 @@ function parseTracks(str) {
         };
 
         // Always use short dashes.
-        track.title = track.title.replace(/—/g, '-');
+        track.title = track.title.replace(/\u2013|\u2014/g, '-');
 
         if (track.title.match(trackNumberRegex)) {
             const match = trackNumberRegex.exec(track.title)[0];

@@ -34,6 +34,9 @@ function lowerCaseWord(word) {
 }
 
 function capitalize(title) {
+    // Always use short dashes.
+    title = title.replace(/\u2013|\u2014/g, '-');
+
     const words = capitalizeSplit(title);
     for (let i = 0; i < words.length; i++) {
         if (alwaysLowerCase.includes(words[i].toLowerCase())) {
