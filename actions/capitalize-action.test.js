@@ -34,7 +34,8 @@ var tests = [
     {title: 'song i love to sing', expected: 'Song I Love to Sing'},
     {title: 'reality used to be a friend of mine', expected: 'Reality Used to Be a Friend of Mine'},
     {title: 'TUNE OF THE WEEK: VIVID & JEN - Breathe Me In [Enhanced]', expected: 'Tune of the Week: Vivid & Jen - Breathe Me in [Enhanced]'},
-    {title: 'Cubicore & Shane 54 - Personal Jesus (cubicore Deep Mix) [armind]', expected: 'Cubicore & Shane 54 - Personal Jesus (Cubicore Deep Mix) [Armind]'}
+    {title: 'Cubicore & Shane 54 - Personal Jesus (cubicore Deep Mix) [armind]', expected: 'Cubicore & Shane 54 - Personal Jesus (Cubicore Deep Mix) [Armind]'},
+    {title: 'PROFF feat. Mokka – Revivial', expected: 'Proff Feat. Mokka - Revivial'},
 
     // Difficult cases that don't work:
 
