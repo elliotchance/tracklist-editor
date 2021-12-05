@@ -83,6 +83,19 @@ var tests = [
             {number: '2', title: 'Diamonds (featuring Solomon Grey)', time: '5:54'},
         ],
     },
+    {
+        str: `
+        1. Loving You (featuring Lulu James) (0:00)
+        2. Diamonds (featuring Solomon Grey) (01:23)
+        3. Pearls                            (0:00:00)
+        4. Emeralds                          (1:00:00)`,
+        expected: [
+            {number: '1', title: 'Loving You (featuring Lulu James)', time: ''},
+            {number: '2', title: 'Diamonds (featuring Solomon Grey)', time: '1:23'},
+            {number: '3', title: 'Pearls', time: ''},
+            {number: '4', title: 'Emeralds', time: '1:00:00'},
+        ],
+    },
 ];
 
 function clean(tracks) {
@@ -90,7 +103,7 @@ function clean(tracks) {
         number: track.number,
         title: track.title,
         time: track.time,
-    })))
+    })), null, 2)
 }
 
 tests.forEach(test => {
