@@ -37,6 +37,9 @@ function parseTracks(str) {
         if (track.title.match(trackTimeRegex)) {
             track.time = trackTimeRegex.exec(track.title)[0];
             track.title = track.title.replace(track.time, '').trim();
+
+            // Trim off any leading zeros from the time (ie. '01:23' -> '1:23').
+            track.time = track.time.replace(/^[0:]+/g, '');
         }
 
         // Strip surrounding "".
