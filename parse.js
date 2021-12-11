@@ -15,10 +15,26 @@ function newTrack(track) {
     }
 }
 
-function parseTracks(str) {
-    const lines = str.split('\n').filter(x => x.trim() !== '');
+function parseTracks(str, lineMode) {
+    let lines = str.split('\n').filter(x => x.trim() !== '');
     const trackNumberRegex = /^\d+[.-\s|]*/;
     const trackTimeRegex = /(\d+:)?\d+:\d\d/;
+
+    if (lineMode === 'artist-first') {
+        let newLines = [];
+        for (let i = 0; i < lines.length; i += 2) {
+            newLines.push(lines[i] + ' - ' + lines[i+1])
+        }
+        lines = newLines;
+    }
+
+    if (lineMode === 'title-first') {
+        let newLines = [];
+        for (let i = 0; i < lines.length; i += 2) {
+            newLines.push(lines[i+1] + ' - ' + lines[i])
+        }
+        lines = newLines;
+    }
 
     const tracks = lines.map((line, i) => {
         let track = {

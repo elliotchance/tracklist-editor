@@ -50,10 +50,11 @@
                     newTrackNumber: '',
                     newTrackTitle: '',
                     newTrackTime: '',
+                    lineMode: 'one-line',
                 },
                 methods: {
                     parse() {
-                        this.tracks = parseTracks(this.rawTrackList);
+                        this.tracks = parseTracks(this.rawTrackList, this.lineMode);
                         bootstrap.Modal.getInstance(document.getElementById('newModal')).hide();
                     },
                     renderHighlight(title, ranges) {
@@ -295,9 +296,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Track Editor will do its best to decipher whatever input you give it. The only important thing
-                        to note is that it will expect there to be one track per line and will ignore blank
-                        lines.<br /><br />
+                        Track Editor will do its best to decipher whatever input you give it.
+                        <br /><br />
+                        <select class="form-select" aria-label="Line mode" v-model="lineMode">
+                          <option value="one-line" selected>One line per track</option>
+                          <option value="artist-first">Two lines per track (artist first)</option>
+                          <option value="title-first">Two lines per track (title first)</option>
+                        </select>
+                        <br />
                         <textarea class="form-control" id="rawTrackList" rows="10"
                             style="font-family: 'Courier New', Courier, monospace;" v-model="rawTrackList"></textarea>
                     </div>
