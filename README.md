@@ -27,9 +27,27 @@ If you see no output, then all tests pass, otherwise you will see an exception.
 
 # API
 
+## refresh()
+
+Call `refresh` on mount to assign a function that should be called when the
+track list changes. For example, the Find/Replace component will need to perform
+the find again when the track list changes:
+
+```js
+Vue.component('find-replace-action', {
+    props: ['refresh'],
+    mounted() {
+        this.refresh(() => {
+            this.find();
+        })
+    },
+});
+```
+
 ## getTracks()
 
 `getTracks` returns an array of tracks. Each track object is described above.
+
 ## setTracks([]Track)
 
 `setTracks` will replace _all_ tracks.

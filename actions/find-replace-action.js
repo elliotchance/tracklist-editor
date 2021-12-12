@@ -1,9 +1,14 @@
 Vue.component('find-replace-action', {
-    props: ['getTracks', 'setTrack', 'highlightTrack'],
+    props: ['getTracks', 'setTrack', 'highlightTrack', 'refresh'],
     watch: {
         lookingFor() {
             this.find();
-        },
+        }
+    },
+    mounted() {
+        this.refresh(() => {
+            this.find();
+        })
     },
     methods: {
         escapeRegExp(string) {
