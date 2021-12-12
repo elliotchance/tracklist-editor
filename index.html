@@ -51,11 +51,16 @@
                     newTrackTitle: '',
                     newTrackTime: '',
                     lineMode: 'one-line',
+                    refreshers: {},
                 },
                 methods: {
                     parse() {
                         this.tracks = parseTracks(this.rawTrackList, this.lineMode);
                         bootstrap.Modal.getInstance(document.getElementById('newModal')).hide();
+                        this.refresh();
+                    },
+                    refresh() {
+                        Object.values(this.refreshers).forEach(fn => fn());
                     },
                     renderHighlight(title, ranges) {
                         if (ranges.length === 0) {
@@ -102,6 +107,8 @@
                         this.tracks = this.tracks.filter(track => {
                             return track.id !== trackId;
                         });
+
+                        this.refresh();
                     },
                     insertTrack(trackId) {
                         for (let i = 0; i < this.tracks.length; i++) {
@@ -110,6 +117,8 @@
                                 break;
                             }
                         }
+
+                        this.refresh();
                     },
                     moveTrackUp(trackId) {
                         for (let i = 0; i < this.tracks.length; i++) {
@@ -118,6 +127,8 @@
                                 break;
                             }
                         }
+
+                        this.refresh();
                     },
                     moveTrackDown(trackId) {
                         for (let i = 0; i < this.tracks.length; i++) {
@@ -126,6 +137,8 @@
                                 break;
                             }
                         }
+
+                        this.refresh();
                     },
                     addTrack() {
                         let number = this.newTrackNumber;
@@ -137,6 +150,11 @@
                             title: this.newTrackTitle,
                             number: number,
                         }));
+
+                        this.refresh();
+                    },
+                    addRefresh(componentName, fn) {
+                        this.refreshers[componentName] = fn;
                     },
                 }
             })
@@ -186,9 +204,12 @@
                             v-bind:aria-labelledby="action.component + '-tab'" v-for="action in actions"
                             :key="action.component">
                             <div class="container" style="padding-top: 10px">
-                                <component v-bind:is="action.component" :get-tracks="() => tracks"
-                                    :set-tracks="newTracks => { tracks = newTracks }" :set-track="setTrack"
-                                    :highlight-track="highlightTrack">
+                                <component v-bind:is="action.component"
+                                    :get-tracks="() => tracks"
+                                    :set-tracks="newTracks => { tracks = newTracks }"
+                                    :set-track="setTrack"
+                                    :highlight-track="highlightTrack"
+                                    :refresh="fn => { addRefresh(action.component, fn) }">
                                 </component>
                             </div>
                         </div>
@@ -247,7 +268,7 @@
                                                 v-if="track.editingTime" autofocus="autofocus"
                                                 @blur="track.editingTime = false" />
                                         </td>
-                                        <td style="text-align: right">
+                                        <td style="text-align: right; white-space: nowrap;">
                                             <button type="button" class="btn btn-outline-info"
                                                 @click="moveTrackUp(track.id)"
                                                 :disabled="track.id === tracks[0].id">&uarr;</button>
@@ -270,7 +291,7 @@
                                         <td>
                                             <input type="text" class="form-control" v-model="newTrackTime" />
                                         </td>
-                                        <td style="text-align: right">
+                                        <td style="text-align: right; white-space: nowrap;">
                                             <button type="button" class="btn btn-outline-success"
                                                 @click="addTrack">+</button>
                                         </td>
@@ -279,9 +300,9 @@
                             </table>
                         </div>
                         <div class="tab-pane fade" id="rym" role="tabpanel" aria-labelledby="rym-tab">
-                            <textarea class="form-control" rows="15" style="font-family: 'Courier New', Courier, monospace;">{{
-                            tracks.map(track => `${track.number}|${track.title}|${track.time}`).join('\n')
-                        }}</textarea>
+                            <textarea class="form-control" rows="15"
+                            style="font-family: 'Courier New', Courier, monospace;"
+                            v-model="tracks.map(track => `${track.number}|${track.title}|${track.time}`).join('\n')"></textarea>
                         </div>
                     </div>
                 </div>
