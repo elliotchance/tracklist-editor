@@ -16,6 +16,14 @@
             background-color: lightskyblue;
             padding: 2px 0 2px 0;
         }
+
+        .highlight {
+            background-color:powderblue;
+        }
+
+        .removeHighlight{
+            background-color: white;
+        }
     </style>
     <script>
         function escapeHtml(unsafe) {
@@ -52,6 +60,8 @@
                     newTrackTime: '',
                     lineMode: 'one-line',
                     refreshers: {},
+                    selectedRow: null,
+                    deselectedRow: null
                 },
                 methods: {
                     parse() {
@@ -156,6 +166,12 @@
                     addRefresh(componentName, fn) {
                         this.refreshers[componentName] = fn;
                     },
+                    highlightTableRow(trackId){
+                        this.selectedRow = trackId
+                    },
+                    removeHighlightTableRow(trackId){
+                        this.deselectedRow = trackId
+                    }
                 }
             })
         })
@@ -248,7 +264,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="track in tracks" :key="track.id">
+                                    <tr v-for="track in tracks" :key="track.id"  @mouseenter="highlightTableRow(track.id)" @mouseleave="removeHighlightTableRow(track.id)" 
+                                    :class="{'highlight': (track.id == selectedRow), 'removeHighlight': (track.id == deselectedRow)}">
                                         <th scope="row" @click="track.editingNumber = true">
                                             <span v-if="!track.editingNumber">{{ track.number }}</span>
                                             <input type="text" class="form-control" v-model="track.number"
