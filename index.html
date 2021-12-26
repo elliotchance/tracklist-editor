@@ -158,7 +158,7 @@
 
                         this.tracks.push(newTrack({
                             title: this.newTrackTitle,
-                            number: number,
+                            number: number.replace(/^0+/, ''),
                         }));
 
                         this.refresh();
