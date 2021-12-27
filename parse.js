@@ -15,6 +15,12 @@ function newTrack(track) {
     }
 }
 
+function titleCase(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  }).join(' ');
+}
+
 function parseTracks(str, lineMode) {
     let lines = str.split('\n').filter(x => x.trim() !== '');
     const trackNumberRegex = /^\d+[.-\s|]*/;
@@ -70,7 +76,7 @@ function parseTracks(str, lineMode) {
         // Strip remaining punctuation.
         track.title = track.title.replace(/\(\s*\)$/g, ' ');
         track.title = track.title.replace(/[|-\s]+$/g, '');
-        track.title = track.title.trim();
+        track.title = titleCase(track.title.trim());
 
         return newTrack(track);
     });
