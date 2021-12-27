@@ -47,6 +47,7 @@ function parseTracks(str, lineMode) {
         if (track.title.match(trackNumberRegex)) {
             const match = trackNumberRegex.exec(track.title)[0];
             track.number = match.replace(/[^\d]/g, '');
+            track.number = track.number.replace(/^0+/, '');
             track.title = track.title.replace(match, '').trim();
         }
 

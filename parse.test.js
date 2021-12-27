@@ -67,6 +67,16 @@ var tests = [
     },
     {
         str: `
+        01 -	Next to  \t  Me
+        02 - Make\tIt Happen`,
+        lineMode: 'one-line',
+        expected: [
+            {number: '1', title: 'Next to Me', time: ''},
+            {number: '2', title: 'Make It Happen', time: ''},
+        ],
+    },
+    {
+        str: `
         First track (1:23)
         Second track (45:57)
         Third track (8:12:34)`,
