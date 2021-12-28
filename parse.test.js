@@ -178,7 +178,7 @@ var tests = [
         str: '“Leave The Door Open”',
         lineMode: 'one-line',
         expected: [
-            {number: '', title: "'Leave The Door Open'", time: ''},
+            {number: '', title: "\"Leave The Door Open\"", time: ''},
         ],
     },
 ];

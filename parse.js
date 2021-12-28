@@ -76,7 +76,7 @@ function parseTracks(str, lineMode) {
             .replace(/[\u2018\u2019]/g, "'");
 
         // Replace double smart quotes with regular apostrophes
-        track.title = track.title.replace(/[\u201C\u201D]/g, "'");
+        track.title = track.title.replace(/[\u201C\u201D]/g, "\"");
 
         track.title = track.title.trim();
 
