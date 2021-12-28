@@ -170,6 +170,27 @@ var tests = [
             {number: '', title: 'Artist 2 - Second track', time: '4:56'},
         ],
     },
+    {
+        str: '\`Leave The Door Open\`',
+        lineMode: 'one-line',
+        expected: [
+            {number: '', title: "'Leave The Door Open'", time: ''},
+        ],
+    },
+    {
+        str: '‘Leave The Door Open’',
+        lineMode: 'one-line',
+        expected: [
+            {number: '', title: "'Leave The Door Open'", time: ''},
+        ],
+    },
+    {
+        str: '“Leave The Door Open”',
+        lineMode: 'one-line',
+        expected: [
+            {number: '', title: "\"Leave The Door Open\"", time: ''},
+        ],
+    },
 ];
 
 function clean(tracks) {
