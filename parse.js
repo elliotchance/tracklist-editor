@@ -40,7 +40,7 @@ function parseTracks(str, lineMode) {
         let track = {
             title: line.trim()
         };
-
+        
         // Always use short dashes.
         track.title = track.title.replace(/\u2013|\u2014/g, '-');
 
@@ -69,6 +69,12 @@ function parseTracks(str, lineMode) {
         // Strip remaining punctuation.
         track.title = track.title.replace(/\(\s*\)$/g, ' ');
         track.title = track.title.replace(/[|-\s]+$/g, '');
+
+        // Replace backticks and single curly apostrophes with regular apostrophes
+        track.title = track.title
+            .replace(/`/g, "'")
+            .replace(/[\u2018\u2019]/g, "'");
+
         track.title = track.title.trim();
 
         return newTrack(track);
