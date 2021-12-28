@@ -174,6 +174,13 @@ var tests = [
             {number: '', title: "'Leave The Door Open'", time: ''},
         ],
     },
+    {
+        str: '“Leave The Door Open”',
+        lineMode: 'one-line',
+        expected: [
+            {number: '', title: "'Leave The Door Open'", time: ''},
+        ],
+    },
 ];
 
 function clean(tracks) {
