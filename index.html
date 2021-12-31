@@ -153,6 +153,10 @@
 
                         this.refresh();
                     },
+                    deleteAllTracks(){
+                        this.tracks = []
+                        this.refresh();
+                    },
                     insertTrack(trackId) {
                         for (let i = 0; i < this.tracks.length; i++) {
                             if (this.tracks[i].id === trackId) {
@@ -293,6 +297,7 @@
                                 type="button" role="tab" aria-controls="rym" aria-selected="false">Rate Your
                                 Music</button>
                         </li>
+                        <button type="button" class="btn btn-outline-danger" @click="deleteAllTracks">Delete All tracks</button>
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
