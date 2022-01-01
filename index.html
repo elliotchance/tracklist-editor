@@ -53,6 +53,12 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
+        function inputFieldsNull(track){
+            track.newTrackNumber="";
+            track.newTrackTitle = "";
+            track.newTrackTime ="";
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             new Vue({
                 el: '#app',
@@ -197,7 +203,7 @@
                             title: capitalizeFirstLetter(this.newTrackTitle),
                             number: number,
                         }));
-
+                        inputFieldsNull(this);
                         this.refresh();
                     },
                     addRefresh(componentName, fn) {
