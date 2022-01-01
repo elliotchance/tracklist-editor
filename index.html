@@ -297,7 +297,6 @@
                                 type="button" role="tab" aria-controls="rym" aria-selected="false">Rate Your
                                 Music</button>
                         </li>
-                        <button type="button" class="btn btn-outline-danger" @click="deleteAllTracks">Delete All tracks</button>
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
@@ -308,7 +307,11 @@
                                         <th scope="col" width="100">#</th>
                                         <th scope="col">Title</th>
                                         <th scope="col" width="100">Time</th>
-                                        <th scope="col">&nbsp;</th>
+                                        <th scope="col" style="text-align: right">
+                                            <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteAllTracks">
+                                                Delete All Tracks
+                                            </button>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
