@@ -153,6 +153,10 @@
 
                         this.refresh();
                     },
+                    deleteAllTracks(){
+                        this.tracks = []
+                        this.refresh();
+                    },
                     insertTrack(trackId) {
                         for (let i = 0; i < this.tracks.length; i++) {
                             if (this.tracks[i].id === trackId) {
@@ -303,7 +307,11 @@
                                         <th scope="col" width="100">#</th>
                                         <th scope="col">Title</th>
                                         <th scope="col" width="100">Time</th>
-                                        <th scope="col">&nbsp;</th>
+                                        <th scope="col" style="text-align: right">
+                                            <button type="button" class="btn btn-outline-danger btn-sm" @click="deleteAllTracks">
+                                                Delete All Tracks
+                                            </button>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
