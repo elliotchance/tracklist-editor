@@ -49,6 +49,10 @@
                 .replace(/'/g, "&#039;");
         }
 
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             new Vue({
                 el: '#app',
@@ -190,7 +194,7 @@
                         }
 
                         this.tracks.push(newTrack({
-                            title: this.newTrackTitle,
+                            title: capitalizeFirstLetter(this.newTrackTitle),
                             number: number,
                         }));
 
