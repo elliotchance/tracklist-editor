@@ -20,3 +20,15 @@ functions:
             parameters:
               querystrings:
                 url: true
+  
+  spotify:
+    handler: spotify.import
+    events:
+      - http:
+          path: /spotify
+          method: GET
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                url: true
