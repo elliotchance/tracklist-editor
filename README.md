@@ -4,7 +4,7 @@
 
 1. Paste a tracklist from anywhere and have it do sensible parsing for titles,
 track numbers, artists and times with *Paste from Anywhere...*
-2. Import tracklists directly from Apple Music and Spotify with a URL.
+2. Import tracklists directly from Apple Music, Discogs and Spotify.
 3. Automatically fix capitalization from
 [RYM standards](https://rateyourmusic.com/wiki/RYM:Capitalization).
 4. Fill in/fix track numbers.
