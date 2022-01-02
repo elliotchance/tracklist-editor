@@ -40,6 +40,10 @@
         const importDomain = '5yni5j4wsk.execute-api.us-east-1.amazonaws.com';
         const importEnv = 'production';
 
+        function createShortcut(type, id) {
+            console.log(type, id);
+        }
+
         function escapeHtml(unsafe) {
             return unsafe
                 .replace(/&/g, "&amp;")
@@ -79,12 +83,17 @@
                     importURL: '',
                     importFrom: 'apple-music',
                     importError: '',
+                    iframeLookupURL: '',
                 },
                 methods: {
                     parse() {
                         this.tracks = parseTracks(this.rawTrackList, this.lineMode);
                         bootstrap.Modal.getInstance(document.getElementById('newModal')).hide();
                         this.refresh();
+                    },
+                    artistLookup() {
+                        const rymURL = 'https://rateyourmusic.com/go/search2?searchterm=Ferry+Corsten&searchtype=a&searchdest=a&func=';
+                        this.iframeLookupURL = `https://${importDomain}/${importEnv}/proxy?url=${encodeURIComponent(rymURL)}`;
                     },
                     runImport() {
                         const url = `https://${importDomain}/${importEnv}/${this.importFrom}?url=${encodeURIComponent(this.importURL)}`;
@@ -244,6 +253,8 @@
         </div>
     </header>
     <div class="container-fluid pb-3" id="app">
+        <button type="button" class="btn btn-warning" @click="artistLookup">Click me</button>
+        <iframe :src="this.iframeLookupURL" v-if="this.iframeLookupURL"></iframe>
         <main role="main" class="container">
             <div class="row">
                 <div class="col">

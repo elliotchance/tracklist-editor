@@ -44,3 +44,15 @@ functions:
             parameters:
               querystrings:
                 url: true
+  
+  proxy:
+    handler: proxy.request
+    events:
+      - http:
+          path: /proxy
+          method: GET
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                url: true
