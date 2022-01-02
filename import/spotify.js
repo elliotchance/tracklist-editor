@@ -5,7 +5,7 @@
 //   curl "https://sxxqp2lco7.execute-api.us-east-1.amazonaws.com/dev/apple-music?url=https%3A%2F%2Fopen.spotify.com%2Falbum%2F5evzhxkqmzMEQIlOY4Jl89"
 
 const fetch = require('node-fetch');
-const { response, formatTime } = require('./util');
+const { response, formatTime, joinArtists } = require('./util');
 
 module.exports.import = async (event) => {
   // Validate the URL to prevent mistakes and abuse.
@@ -43,20 +43,7 @@ module.exports.import = async (event) => {
 
   // Only include artist(s) if they are different on the tracks.
   let trackTitleFn = (item) => {
-    const artists = item.artists
-      .map(artist => artist.name)
-      .map((artist, i) => {
-        if (item.artists.length > 1 && i === item.artists.length - 1) {
-          return ' & ' + artist;
-        }
-
-        if (i === 0) {
-          return artist;
-        }
-
-        return ', ' + artist;
-      })
-      .join('');
+    const artists = joinArtists(item.artists.map(artist => artist.name));
 
     return `${artists} - ${item.name}`
   };

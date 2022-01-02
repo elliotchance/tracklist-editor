@@ -1,5 +1,6 @@
 test:
 	node apple-music.test.js
+	node discogs.test.js
 	node spotify.test.js
 
 dev:

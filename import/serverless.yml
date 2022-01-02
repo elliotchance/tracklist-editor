@@ -21,6 +21,18 @@ functions:
               querystrings:
                 url: true
   
+  discogs:
+    handler: discogs.import
+    events:
+      - http:
+          path: /discogs
+          method: GET
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                url: true
+  
   spotify:
     handler: spotify.import
     events:
