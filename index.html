@@ -417,19 +417,38 @@
                         </div>
                         <select class="form-select" aria-label="From" v-model="importFrom">
                           <option value="apple-music" selected>Apple Music</option>
+                          <option value="spotify">Spotify</option>
                         </select>
                         <br />
-                        Within Apple Music, use
-                        <strong>Share > Copy Link</strong> and paste it below.
-                        An example URL looks like:
-                        <br />
-                        <ul>
-                            <li> 
-                                <a href="https://music.apple.com/us/album/nye-2022-dj-mix/1600990821" target="_blank">
-                                    https://music.apple.com/us/album/nye-2022-dj-mix/1600990821
-                                </a>
-                            </li>
-                        </ul>
+
+                        <div v-if="importFrom === 'apple-music'">
+                            Within an Apple Music album, use
+                            <strong>Share > Copy Link</strong> and paste it
+                            below. An example URL looks like:
+                            <br />
+                            <ul>
+                                <li> 
+                                    <a href="https://music.apple.com/us/album/nye-2022-dj-mix/1600990821" target="_blank">
+                                        https://music.apple.com/us/album/nye-2022-dj-mix/1600990821
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div v-if="importFrom === 'spotify'">
+                            Within a Spotify album, use
+                            <strong>... > Share > Copy Album Link</strong> and
+                            paste it below. An example URL looks like:
+                            <br />
+                            <ul>
+                                <li> 
+                                    <a href="https://open.spotify.com/album/5Fliz4RQcDktb93l1uYDka" target="_blank">
+                                        https://open.spotify.com/album/5Fliz4RQcDktb93l1uYDka
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                         <input type="text" class="form-control" v-model="importURL" placeholder="URL" />
                     </div>
                     <div class="modal-footer">

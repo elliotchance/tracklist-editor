@@ -5,6 +5,7 @@
 //   curl "https://sxxqp2lco7.execute-api.us-east-1.amazonaws.com/dev/apple-music?url=https%3A%2F%2Fmusic.apple.com%2Fus%2Falbum%2Fnye-2022-dj-mix%2F1600990821"
 
 const fetch = require('node-fetch');
+const { response } = require('./util');
 
 module.exports.import = async (event) => {
   // Validate the URL to prevent mistakes and abuse.
@@ -59,14 +60,3 @@ module.exports.import = async (event) => {
     tracks,
   });
 };
-
-function response(statusCode, body) {
-  return {
-    statusCode,
-    body: JSON.stringify(body),
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
-  };
-}
