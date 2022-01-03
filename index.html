@@ -49,6 +49,12 @@
                 .replace(/'/g, "&#039;");
         }
 
+        function inputFieldsNull(track){
+            track.newTrackNumber="";
+            track.newTrackTitle = "";
+            track.newTrackTime ="";
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             new Vue({
                 el: '#app',
@@ -198,6 +204,7 @@
                             number: number,
                         }));
 
+                        inputFieldsNull(this);
                         this.refresh();
                     },
                     addRefresh(componentName, fn) {
