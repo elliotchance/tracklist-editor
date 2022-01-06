@@ -26,7 +26,7 @@ module.exports.import = async (event) => {
   // TODO(elliotchance): This is an ultra crude regexp that will probably break
   //  in the future. Yes, I know we should use the API but I don't want to
   //  register an app and deal with the secrets at the moment.
-  const matches = body.match(/Spotify\.Entity = (.*)/);
+  const matches = body.match(/id="initial-state">(.*?)<\/script>/s);
   if (!matches) {
     return response(500, {
       error: `Cannot parse album, please open an issue with this URL`,
@@ -34,10 +34,11 @@ module.exports.import = async (event) => {
   }
 
   const data = JSON.parse(matches[1].replace(/[\s;]+$/, ''));
+  const parsedTracks = data.entities.items[Object.keys(data.entities.items)[0]].tracks.items;
 
   // Only include the disc number if there are multiple discs.
   let trackNumberFn = (item) => `${item.disc_number}.${item.track_number}`;
-  if (new Set(data.tracks.items.map(track => track.disc_number)).size === 1) {
+  if (new Set(parsedTracks.map(track => track.disc_number)).size === 1) {
     trackNumberFn = (item) => item.track_number;
   }
 
@@ -47,12 +48,12 @@ module.exports.import = async (event) => {
 
     return `${artists} - ${item.name}`
   };
-  if (new Set(data.tracks.items.map(track => track.artists.map(artist => artist.name).join(', '))).size === 1) {
+  if (new Set(parsedTracks.map(track => track.artists.map(artist => artist.name).join(', '))).size === 1) {
     trackTitleFn = (item) => item.name;
   }
 
   let tracks = [];
-  for (const item of data.tracks.items) {
+  for (const item of parsedTracks) {
     tracks.push({
       number: trackNumberFn(item),
       title: trackTitleFn(item),
