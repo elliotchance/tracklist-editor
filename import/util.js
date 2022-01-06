@@ -40,6 +40,9 @@ function decodeHtml(str) {
     replace(/&#(\d+);/g, function(match, dec) {
       return String.fromCharCode(dec);
     }).
+    replace(/&#x(\d+);/g, function(match, dec) {
+      return String.fromCharCode(parseInt('0x' + dec, 16));
+    }).
     replace('&amp;', '&');
 };
 
