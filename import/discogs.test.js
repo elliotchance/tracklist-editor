@@ -24,6 +24,86 @@ assertDiscogs({
   error: 'Invalid URL: https://www.discogs.com/something-else',
 });
 
+// Release URL with credits (but no featuring)
+assertDiscogs({
+  url: 'https://www.discogs.com/release/1137659-Furtips-When-My-Baby-Smiles-At-Me-I-Go-To-Rio',
+  tracks: [
+    { number: 1, title: "It's Cold Offside", time: '2:37' },
+    { number: 2, title: 'Grapes, No Vine', time: '3:02' },
+    { number: 3, title: 'Chosen Ones', time: '3:13' },
+    { number: 4, title: 'My Girl (Is Lazy)', time: '0:50' },
+    { number: 5, title: 'Selection Kat', time: '1:47' },
+    { number: 6, title: "Isn't She Pretty", time: '2:48' },
+    { number: 7, title: 'BWC Caruso', time: '3:29' },
+    { number: 8, title: 'Eat All Our Heart', time: '3:20' },
+    { number: 9, title: 'Neat!', time: '1:27' },
+    { number: 10, title: 'Park Angerenstein', time: '0:50' },
+    { number: 11, title: 'Bunny Falcon', time: '2:24' },
+    { number: 12, title: 'Vampire Smile', time: '2:06' },
+    { number: 13, title: 'Stand Back, Speak Normally', time: '3:18' },
+    { number: 14, title: 'Colonel Impossible', time: '2:46' },
+    { number: 15, title: 'Das Schloss', time: '2:34' }
+  ],
+});
+
+// Release URL with featuring credits
+assertDiscogs({
+  url: 'https://www.discogs.com/release/14749028-Rameses-B-Cosmonauts',
+  tracks: [
+    { number: 1, title: 'Raindrops (feat. Rhode)', time: '4:22' },
+    { number: 2, title: 'All For One (feat. Zoe Moon)', time: '4:12' },
+    { number: 3, title: 'Lost', time: '5:06' },
+    { number: 4, title: 'Hold Me Close', time: '3:50' },
+    { number: 5, title: 'Through My Eyes', time: '3:52' },
+    { number: 6, title: 'Hero (feat. Irosa)', time: '4:10' },
+    { number: 7, title: 'God Mode', time: '4:28' },
+    { number: 8, title: 'Cosmonauts', time: '4:44' },
+    { number: 9, title: 'Far From Home', time: '2:55' }
+  ],
+});
+
+// Release URL with various artists and featuring
+assertDiscogs({
+  url: 'https://www.discogs.com/release/5647466-Armin-van-Buuren-A-State-Of-Trance-2005-Light',
+  tracks: [
+    { number: 1, title: 'Explore All - I Found You', time: '5:13' },
+    { number: 2, title: 'Hidden Logic - Wasting', time: '4:11' },
+    { number: 3, title: 'Markus Schulz - First Time', time: '5:33' },
+    {
+      number: 4,
+      title: "Max Graham - I Know You're Gone (feat. Max Graham)",
+      time: '3:48'
+    },
+    { number: 5, title: 'Mike Foyle - Space Guitar', time: '4:50' },
+    { number: 6, title: 'Ava Mea - In The End', time: '3:20' },
+    { number: 7, title: 'Elevation - Ocean Rain', time: '4:39' },
+    {
+      number: 8,
+      title: 'Locust - Aerospace (Probspot Remix)',
+      time: '5:43'
+    },
+    { number: 9, title: 'Armin van Buuren - Shivers', time: '6:37' },
+    { number: 10, title: 'EnMass - Beyond Horizon', time: '5:43' },
+    {
+      number: 11,
+      title: 'Kyau vs. Albert - Falling Anywhere (Rework)',
+      time: '4:01'
+    },
+    {
+      number: 12,
+      title: 'Fragile - Inertia (Armin van Buuren Remix) (feat. Vangelis Labrakis)',
+      time: '6:36'
+    },
+    {
+      number: 13,
+      title: "Sophie Sugar - Call Of Tomorrow (John O'Callaghan Remix)",
+      time: '4:35'
+    },
+    { number: 14, title: 'Marcos - Cosmicstring', time: '6:14' },
+    { number: 15, title: 'John Askew - Mood Swing', time: '4:32' }
+  ],
+});
+
 // Single artist
 assertDiscogs({
   url: 'https://www.discogs.com/master/146065-OneRepublic-Dreaming-Out-Loud',
