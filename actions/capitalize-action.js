@@ -1,5 +1,6 @@
 const doNotCapitalize = ['a', 'an', 'and', 'the', 'at', 'by', 'for', 'in', 'of', 'on', 'to', 'vs.', 'v.', 'etc.', 'or'];
 const alwaysLowerCase = ['etc.'];
+const alwaysUpperCase = ['DJ', 'ID'];
 const punctuation = [',', ' ', '(', ')', '[', ']', ':']
 
 function capitalizeSplit(title) {
@@ -25,12 +26,8 @@ function capitalizeSplit(title) {
     return parts;
 }
 
-function upperCaseWord(word) {
+function titleCaseWord(word) {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
-}
-
-function lowerCaseWord(word) {
-    return word[0].toLowerCase() + word.substr(1).toLowerCase();
 }
 
 function capitalize(title) {
@@ -40,7 +37,12 @@ function capitalize(title) {
     const words = capitalizeSplit(title);
     for (let i = 0; i < words.length; i++) {
         if (alwaysLowerCase.includes(words[i].toLowerCase())) {
-            words[i] = lowerCaseWord(words[i])
+            words[i] = words[i].toLowerCase();
+            continue
+        }
+
+        if (alwaysUpperCase.includes(words[i].toUpperCase())) {
+            words[i] = words[i].toUpperCase()
             continue
         }
 
@@ -52,9 +54,9 @@ function capitalize(title) {
             (i < words.length - 1 && words[i+1] == ')') || (i > words.length - 1 && words[i+1] == ']');
 
         if (special || !doNotCapitalize.includes(words[i].toLowerCase())) {
-            words[i] = upperCaseWord(words[i])
+            words[i] = titleCaseWord(words[i])
         } else {
-            words[i] = lowerCaseWord(words[i])
+            words[i] = words[i].toLowerCase();
         }
     }
 
