@@ -19,6 +19,7 @@
     <script src="parse.js"></script>
     <script src="actions/capitalize-action.js"></script>
     <script src="actions/find-replace-action.js"></script>
+    <script src="actions/quick-fix-action.js"></script>
     <script src="actions/track-numbers-action.js"></script>
     <style>
         .selected {
@@ -68,6 +69,10 @@
                         {
                             component: 'find-replace-action',
                             name: 'Find/Replace'
+                        },
+                        {
+                            component: 'quick-fix-action',
+                            name: 'Quick Fix'
                         },
                         {
                             component: 'track-numbers-action',
