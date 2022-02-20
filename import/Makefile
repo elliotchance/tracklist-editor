@@ -1,7 +1,5 @@
 test:
-	node apple-music.test.js
-	node discogs.test.js
-	node spotify.test.js
+	npm run test
 
 dev:
 	sls deploy --stage dev

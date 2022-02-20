@@ -6,6 +6,7 @@
 
 const fetch = require('node-fetch');
 const { response } = require('./util');
+const HTMLParser = require('node-html-parser');
 
 module.exports.import = async (event) => {
   // Validate the URL to prevent mistakes and abuse.
@@ -23,6 +24,36 @@ module.exports.import = async (event) => {
 
   // Parse tracks.
   //
+  // Tip: For debugging use ".structure" to pretty print. See
+  // https://www.npmjs.com/package/node-html-parser
+  const root = HTMLParser.parse(body);
+  let tracks = [];
+  for (const song of root.querySelectorAll('.songs-list-row--song')) {
+    const titleWrapper = song.querySelector('.songs-list-row__song-name-wrapper');
+
+    let title = titleWrapper.text.trim();
+    const artist = titleWrapper.querySelector('.songs-list-row__by-line span');
+    if (artist) {
+      title = artist.childNodes.map(e => e.text.trim()).join(' ').trim() + ' - ' + titleWrapper.querySelector('div').text.trim();
+    }
+
+    tracks.push({
+      number: song.querySelector('.songs-list-row__index-wrapper').text.trim(),
+      title,
+      time: song.querySelector('time').text.trim(),
+    });
+    // console.log(song.querySelector('.songs-list-row__song-name-wrapper').structure)
+    // const [_, title, time] = song.querySelectorAll('div');
+    // console.log(title.text.trim(), time.text.trim())
+  }
+
+  return response(200, {
+    tracks,
+  });
+  
+
+  // Parse tracks.
+  //
   // TODO(elliotchance): This is an ultra crude regexp that will probably break
   //  in the future.
   //
@@ -33,30 +64,30 @@ module.exports.import = async (event) => {
   // to fall out that way, but also an album with one track could hardly be
   // considered various artists. Maybe this is possible - I haven't seen any
   // examples of this though.
-  let matches = Array.from(body.matchAll(/songs-list-row__song-name">([^<]+).*?row__link".*?>([^<]+).*?row__length">([^<]+)/gs));
-  let decoder = (match, number) => ({
-    number,
-    title: match[2].trim() + ' - ' + match[1].trim(),
-    time: match[3].trim(),
-  });
+  // let matches = Array.from(body.matchAll(/songs-list-row__song-name">([^<]+).*?row__link".*?>([^<]+).*?row__length">([^<]+)/gs));
+  // let decoder = (match, number) => ({
+  //   number,
+  //   title: match[2].trim() + ' - ' + match[1].trim(),
+  //   time: match[3].trim(),
+  // });
 
-  if (matches.length < 2) {
-    matches = Array.from(body.matchAll(/songs-list-row__song-name".*?>(.*?)<.*?row__length".*?>(.*?)</gs));
-    decoder = (match, number) => ({
-      number,
-      title: match[1].trim(),
-      time: match[2].trim(),
-    });
-  }
+  // if (matches.length < 2) {
+  //   matches = Array.from(body.matchAll(/songs-list-row__song-name".*?>(.*?)<.*?row__length".*?>(.*?)</gs));
+  //   decoder = (match, number) => ({
+  //     number,
+  //     title: match[1].trim(),
+  //     time: match[2].trim(),
+  //   });
+  // }
 
-  let tracks = [];
-  let number = 1;
-  for (const match of matches) {
-    tracks.push(decoder(match, number));
-    ++number;
-  }
+  // let tracks = [];
+  // let number = 1;
+  // for (const match of matches) {
+  //   tracks.push(decoder(match, number));
+  //   ++number;
+  // }
 
-  return response(200, {
-    tracks,
-  });
+  // return response(200, {
+  //   tracks,
+  // });
 };

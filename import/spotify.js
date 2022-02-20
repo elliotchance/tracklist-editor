@@ -6,6 +6,7 @@
 
 const fetch = require('node-fetch');
 const { response, formatTime, joinArtists } = require('./util');
+const HTMLParser = require('node-html-parser');
 
 module.exports.import = async (event) => {
   // Validate the URL to prevent mistakes and abuse.
@@ -23,42 +24,27 @@ module.exports.import = async (event) => {
 
   // Parse tracks.
   //
-  // TODO(elliotchance): This is an ultra crude regexp that will probably break
-  //  in the future. Yes, I know we should use the API but I don't want to
-  //  register an app and deal with the secrets at the moment.
-  const matches = body.match(/id="initial-state">(.*?)<\/script>/s);
-  if (!matches) {
-    return response(500, {
-      error: `Cannot parse album, please open an issue with this URL`,
-    });
-  }
-
-  const data = JSON.parse(matches[1].replace(/[\s;]+$/, ''));
-  const parsedTracks = data.entities.items[Object.keys(data.entities.items)[0]].tracks.items;
-
-  // Only include the disc number if there are multiple discs.
-  let trackNumberFn = (item) => `${item.disc_number}.${item.track_number}`;
-  if (new Set(parsedTracks.map(track => track.disc_number)).size === 1) {
-    trackNumberFn = (item) => item.track_number;
-  }
-
-  // Only include artist(s) if they are different on the tracks.
-  let trackTitleFn = (item) => {
-    const artists = joinArtists(item.artists.map(artist => artist.name));
-
-    return `${artists} - ${item.name}`
-  };
-  if (new Set(parsedTracks.map(track => track.artists.map(artist => artist.name).join(', '))).size === 1) {
-    trackTitleFn = (item) => item.name;
-  }
-
+  // Tip: For debugging use ".structure" to pretty print. See
+  // https://www.npmjs.com/package/node-html-parser
+  const root = HTMLParser.parse(body);
   let tracks = [];
-  for (const item of parsedTracks) {
+  let allArtists = new Set();
+  for (const row of root.querySelectorAll('button[data-testid="entity-row-v2-button"]')) {
+    const [title, artists] = row.childNodes[1].childNodes[0].childNodes;
+
     tracks.push({
-      number: trackNumberFn(item),
-      title: trackTitleFn(item),
-      time: formatTime(Math.round(item.duration_ms / 1000)),
+      number: row.childNodes[0].text,
+      title: artists.text + ' - ' + title.text,
     });
+
+    allArtists.add(artists.text);
+  }
+
+  if (allArtists.size === 1) {
+    tracks = tracks.map(track => ({
+      ...track,
+      title: track.title.substr(Array.from(allArtists)[0].length + 3),
+    }));
   }
 
   return response(200, {

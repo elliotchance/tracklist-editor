@@ -6,18 +6,16 @@
 
 const fetch = require('node-fetch');
 const { response, formatTime, joinArtists, decodeHtml } = require('./util');
+const HTMLParser = require('node-html-parser');
 
 module.exports.import = async (event) => {
   // Validate the URL to prevent mistakes and abuse.
   const querystring = event.queryStringParameters;
   const url = querystring.url;
 
-  if (url.startsWith('https://www.discogs.com/master/')) {
-    return parseMasterPage(url);
-  }
-
-  if (url.startsWith('https://www.discogs.com/release/')) {
-    return parseReleasePage(url);
+  if (url.startsWith('https://www.discogs.com/release/') ||
+    url.startsWith('https://www.discogs.com/master/')) {
+    return parsePage(url);
   }
 
   return response(400, {
@@ -25,76 +23,43 @@ module.exports.import = async (event) => {
   });
 };
 
-async function parseMasterPage(url) {
+async function parsePage(url) {
   // Fetch the raw HTML.
   const resp = await fetch(url);
   const body = await resp.text();
 
   // Parse tracks.
   //
-  // TODO(elliotchance): This is an ultra crude regexp that will probably break
-  //  in the future.
-  let matches = Array.from(body.matchAll(/("tracklist_track_artists">(.*?)<\/td>.*?)?"tracklist_track_title">([^<]+).*?<span>([\d:]+)/gs));
-
+  // Tip: For debugging use ".structure" to pretty print. See
+  // https://www.npmjs.com/package/node-html-parser
+  const root = HTMLParser.parse(body);
   let tracks = [];
-  let number = 1;
-  for (const match of matches) {
-    let track = {
-      number,
-      title: decodeHtml(match[3].trim()),
-      time: match[4].trim(),
-    };
+  for (const tr of root.querySelector('#release-tracklist').querySelectorAll('tr')) {
+    const [pos, artist, title, duration] = tr.querySelectorAll('td');
+    let realTitle = title.querySelector('span').text;
 
-    if (match[2]) {
-      let artists = joinArtists(Array.from(match[2].matchAll(/<a.*?>(.*?)</gs))
-        .map(m => m[1].replace(/\(.*\)$/, '').trim()));
-      track.title = decodeHtml(artists + ' - ' + match[3].trim());
+    // Optional artist.
+    if (artist.text) {
+      realTitle = artist.childNodes.map(a => cleanArtistName(a.text)).join(' ') + '- ' + realTitle;
     }
 
-    tracks.push(track);
-    ++number;
-  }
+    // Optional credits.
+    for (const credits of title.querySelectorAll('div[class^="credits_"] div')) {
+      if (!credits.text.includes('Featuring')) {
+        continue;
+      }
 
-  return response(200, {
-    tracks,
-  });
-}
+      const artistNames = credits.querySelectorAll('span[class^="link_"]')
+        .map(credit => cleanArtistName(credit.text));
 
-async function parseReleasePage(url) {
-  // Fetch the raw HTML.
-  const resp = await fetch(url);
-  const body = await resp.text();
-
-  // Parse tracks.
-  //
-  // TODO(elliotchance): This is an ultra crude regexp that will probably break
-  //  in the future.
-  let matches = Array.from(body.matchAll(/(link_\w+">([^<]+)<\/a>.*?dash.*?)?trackTitle_\w+">(.*?)<\/td>.*?"duration_\w+"><span>(.*?)<\/span>/gs));
-
-  let tracks = [];
-  let number = 1;
-  for (const match of matches) {
-    let submatches = Array.from(match[3].matchAll(/>(.*?)</gs));
-
-    let track = {
-      number,
-      title: decodeHtml(submatches[0][1].trim()),
-      time: match[4].trim(),
-    };
-
-    if (match[2]) {
-      track.title = decodeHtml(cleanArtistName(match[2]) + ' - ' + submatches[0][1].trim());
+      realTitle += ` (feat. ${joinArtists(Array.from(new Set(artistNames)))})`;
     }
 
-    // Extract Featuring credits, if any.
-    let featuringMatches = Array.from(match[3].matchAll(/<div><span>(.*?)<\/span>.*link_15cpV">(.+?)<\/a>.*?<\/div>/gs))
-      .filter(match => match[1] === 'Featuring');
-    if (featuringMatches.length > 0) {
-      track.title += ` (feat. ${joinArtists(featuringMatches.map(credit => cleanArtistName(credit[2])))})`;
-    }
-
-    tracks.push(track);
-    ++number;
+    tracks.push({
+      number: pos.text,
+      title: realTitle,
+      time: duration.text,
+    });
   }
 
   return response(200, {
@@ -103,5 +68,5 @@ async function parseReleasePage(url) {
 }
 
 function cleanArtistName(artist) {
-  return artist.split('(')[0].trim();
+  return artist.split('(')[0].replace('–', '').replace('*', '').trim();
 }

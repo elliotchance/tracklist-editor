@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "node-fetch": "^2.6.6"
+    "node-fetch": "^2.6.6",
+    "node-html-parser": "^5.2.0"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
