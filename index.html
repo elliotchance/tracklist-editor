@@ -429,6 +429,7 @@
                         </div>
                         <select class="form-select" aria-label="From" v-model="importFrom">
                           <option value="apple-music" selected>Apple Music</option>
+                          <option value="bandcamp">Bandcamp</option>
                           <option value="discogs">Discogs</option>
                           <option value="spotify">Spotify</option>
                         </select>
@@ -443,6 +444,19 @@
                                 <li> 
                                     <a href="https://music.apple.com/us/album/nye-2022-dj-mix/1600990821" target="_blank">
                                         https://music.apple.com/us/album/nye-2022-dj-mix/1600990821
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div v-if="importFrom === 'bandcamp'">
+                            Copy the URL of a bandcamp album page and paste it
+                            below. An example URL looks like:
+                            <br />
+                            <ul>
+                                <li> 
+                                    <a href="https://ramesesb.bandcamp.com/album/inspire-ep" target="_blank">
+                                        https://ramesesb.bandcamp.com/album/inspire-ep
                                     </a>
                                 </li>
                             </ul>

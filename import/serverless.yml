@@ -20,6 +20,18 @@ functions:
             parameters:
               querystrings:
                 url: true
+
+  bandcamp:
+    handler: bandcamp.import
+    events:
+      - http:
+          path: /bandcamp
+          method: GET
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                url: true
   
   discogs:
     handler: discogs.import
