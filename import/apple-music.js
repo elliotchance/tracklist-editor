@@ -42,52 +42,9 @@ module.exports.import = async (event) => {
       title,
       time: song.querySelector('time').text.trim(),
     });
-    // console.log(song.querySelector('.songs-list-row__song-name-wrapper').structure)
-    // const [_, title, time] = song.querySelectorAll('div');
-    // console.log(title.text.trim(), time.text.trim())
   }
 
   return response(200, {
     tracks,
   });
-  
-
-  // Parse tracks.
-  //
-  // TODO(elliotchance): This is an ultra crude regexp that will probably break
-  //  in the future.
-  //
-  // There are a few layouts we need to test, specially various artist albums
-  // have a different layout than a single artist album.
-
-  // If we get more than one match, this must be a VA album. The regexp happens
-  // to fall out that way, but also an album with one track could hardly be
-  // considered various artists. Maybe this is possible - I haven't seen any
-  // examples of this though.
-  // let matches = Array.from(body.matchAll(/songs-list-row__song-name">([^<]+).*?row__link".*?>([^<]+).*?row__length">([^<]+)/gs));
-  // let decoder = (match, number) => ({
-  //   number,
-  //   title: match[2].trim() + ' - ' + match[1].trim(),
-  //   time: match[3].trim(),
-  // });
-
-  // if (matches.length < 2) {
-  //   matches = Array.from(body.matchAll(/songs-list-row__song-name".*?>(.*?)<.*?row__length".*?>(.*?)</gs));
-  //   decoder = (match, number) => ({
-  //     number,
-  //     title: match[1].trim(),
-  //     time: match[2].trim(),
-  //   });
-  // }
-
-  // let tracks = [];
-  // let number = 1;
-  // for (const match of matches) {
-  //   tracks.push(decoder(match, number));
-  //   ++number;
-  // }
-
-  // return response(200, {
-  //   tracks,
-  // });
 };
